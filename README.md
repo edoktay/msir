@@ -26,8 +26,8 @@ MATLAB codes for performing three-stage mixed precision iterative refinement sol
 
 ## Requirements
 * The codes have been developed and tested with MATLAB 2020a.
-* The codes requires ssget MATLAB interface for testing the algorithm on matrices in SuiteSparse collection.
-* This code requires Cleve Laboratory to perform half precision computations and 
+* The code tsir_test_ss.m requires ssget MATLAB interface for testing the algorithm on matrices in SuiteSparse collection.
+* The codes require Cleve Laboratory to perform half precision computations and 
 Advanpix Multiprecision Computing Toolbox for extended precision computations. 
 A free trial of Advanpix is available for download from https://www.advanpix.com/.
     * If you prefer to not use the Advanpix library, use the code within the vpa directory, which uses MATLAB's vpa to perform higher precision computations. Note that this is much slower than Advanpix. 
