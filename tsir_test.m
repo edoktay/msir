@@ -186,7 +186,7 @@ for i = 1:numel(condnums)
     
     uf = 0; u =2; ur = 4;
     
-    snbase = strcat('figs/mode2_rand_size_100_cond_e',num2str(log10(condnums(i))),'_');
+    snbase = strcat('figs/mode3_rand_size_100_cond_e',num2str(log10(condnums(i))),'_');
     
     sir(A,b,uf,u,ur,maxit,strcat(snbase,'SIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
