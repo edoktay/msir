@@ -94,11 +94,11 @@ for i = 1:iter_max
             temp(isnan(temp)) = 0; % Set 0/0 to 0.
             cbe(i) = max(temp);
             
-            %Check convergence
-            if isnan(ferr(i)) || isnan(nbe(i)) || isnan(cbe(i))
-                cged = 0;
-                break;
-            end
+%             %Check convergence
+%             if isnan(ferr(i)) || isnan(nbe(i)) || isnan(cbe(i))
+%                 cged = 0;
+%                 break;
+%             end
             if max([ferr(i) nbe(i) cbe(i)]) <= u
                 cged = 1;
                 break;
@@ -120,6 +120,8 @@ for i = 1:iter_max
             %Convergence detected, but we will keep iterating for now
             if ( (phi(i) >= 0) && (phi(i) <= u) )
                 fprintf('\n SIR Convergence Detected\n');
+%                 cged = 1;
+%                 return;
             else
                 %If the error is larger than the initial error we started
                 %with, reset initial solution
