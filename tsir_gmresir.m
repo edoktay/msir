@@ -80,6 +80,9 @@ for i = 1:iter_max
     
     
     if i < iter_max
+        
+
+        
         %Update solution
         if precw == 0
             x = chop(x + chop(chop(norm_rd)*chop(d)));

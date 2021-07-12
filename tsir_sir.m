@@ -75,6 +75,8 @@ for i = 1:iter_max
     else      
         if i < iter_max
             
+            xold = x;
+            
             %Update solution
             if precw == 0
                 x = chop(x + chop(chop(norm_rd)*chop(d)));
@@ -107,7 +109,7 @@ for i = 1:iter_max
         %Compute quantities needed to decide whether to switch to SGMRESIR
         norm_ddex = norm(d,'inf')/norm(dex,'inf');
         rho_threshmax = max(rho_threshmax, norm_ddex);
-        norm_dx = norm_rd*norm(d,'inf')/norm(x,'inf');
+        norm_dx = norm_rd*norm(d,'inf')/norm(xold,'inf');
         norm_dx = double(norm_dx);
         phi(i) = norm_dx/(1-rho_threshmax);
         dex = d;
