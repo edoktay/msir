@@ -4,6 +4,7 @@
 %Note: requires ssget MATLAB interface
 
 matids = [907, 1641, 293, 906, 462, 464, 1199, 2338, 253];
+maxit = 10;
 
 fprintf('Running SDQ tests for SuiteSparse matrices\n');
 for i = 1:numel(matids)
