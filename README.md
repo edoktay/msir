@@ -15,9 +15,9 @@ MATLAB codes for performing three-stage mixed precision iterative refinement sol
 
 * **_gmresir.m_** is a function that performs GMRES-based iterative refinement in three precisions with an extra higher precision in factorization and preconditioner steps of GMRES.
 
-* **_tsir.m_** * is a function that performs three-stage iterative refinement in three precisions, switching from SIR to SGMRES-IR to GMRES-IR based on stopping criteria.
+* **_tsir.m_** is a function that performs three-stage iterative refinement in three precisions, switching from SIR to SGMRES-IR to GMRES-IR based on stopping criteria.
 
-* **_tsir_sir.m, tsir_sgmresir.m, tsir_gmresir.m_** * are the modified versions of SIR, SGMRES-IR, and GMRES-IR, respectively, called from within the tsir.m function. These functions are not designed to be called alone; if you want to just run SIR, SGMRES-IR, or GMRES-IR, use the functions without the "tsir_" prefix. 
+* **_tsir_sir.m, tsir_sgmresir.m, tsir_gmresir.m_** are the modified versions of SIR, SGMRES-IR, and GMRES-IR, respectively, called from within the tsir.m function. These functions are not designed to be called alone; if you want to just run SIR, SGMRES-IR, or GMRES-IR, use the functions without the "tsir_" prefix. 
 
 * **_gmres_hs.m, gmres_sd.m, and gmres_dq.m_** are functions that run left-preconditioned GMRES using precisions half/single, single/double, and double/quad, resp. Application of the preconditioned coefficient matrix to a vector and the preconditioner to the right-hand-side vector are performed in the higher precision; other computations performed all use the lower precision.  
 
