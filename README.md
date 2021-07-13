@@ -1,5 +1,5 @@
 # tsir
-MATLAB codes for performing three-stage mixed precision iterative refinement solver
+MATLAB codes for performing three-stage mixed precision iterative refinement
 
 
 ## Included MATLAB files
