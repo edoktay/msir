@@ -9,11 +9,15 @@ MATLAB codes for performing three-stage mixed precision iterative refinement sol
 
 * **_lp_matvec.m_** is a function that performs matvec in low precision. It is available at https://github.com/SrikaraPranesh/Multi_precision_NLA_kernels.
 
-* **_sir3.m_** is a function that performs LU-based iterative refinement with three precisions.
+* **_sir.m_** is a function that performs LU-based iterative refinement with three precisions.
 
-* **_sgmresir3.m_** is a function that performs GMRES-based iterative refinement in three precisions.
+* **_sgmresir.m_** is a function that performs GMRES-based iterative refinement in three precisions.
 
-* **_gmresir3.m_** is a function that performs GMRES-based iterative refinement in three precisions with an extra higher precision in factorization and preconditioner steps of GMRES.
+* **_gmresir.m_** is a function that performs GMRES-based iterative refinement in three precisions with an extra higher precision in factorization and preconditioner steps of GMRES.
+
+* **_tsir.m_** * is a function that performs three-stage iterative refinement in three precisions, switching from SIR to SGMRES-IR to GMRES-IR based on stopping criteria.
+
+* **_tsir_sir.m, tsir_sgmresir.m, tsir_gmresir.m_** * are the modified versions of SIR, SGMRES-IR, and GMRES-IR, respectively, called from within the tsir.m function. These functions are not designed to be called alone; if you want to just run SIR, SGMRES-IR, or GMRES-IR, use the functions without the "tsir_" prefix. 
 
 * **_gmres_hs.m, gmres_sd.m, and gmres_dq.m_** are functions that run left-preconditioned GMRES using precisions half/single, single/double, and double/quad, resp. Application of the preconditioned coefficient matrix to a vector and the preconditioner to the right-hand-side vector are performed in the higher precision; other computations performed all use the lower precision.  
 
@@ -27,8 +31,7 @@ MATLAB codes for performing three-stage mixed precision iterative refinement sol
 ## Requirements
 * The codes have been developed and tested with MATLAB 2020a.
 * tsir_test_ss.m requires ssget MATLAB interface for testing the algorithm on matrices in SuiteSparse collection.
-* The codes require Cleve Laboratory to perform half precision computations and 
-Advanpix Multiprecision Computing Toolbox for extended precision computations. 
+* The codes require the Advanpix Multiprecision Computing Toolbox for extended precision computations. 
 A free trial of Advanpix is available for download from https://www.advanpix.com/.
-    * If you prefer to not use the Advanpix library, use the code within the vpa directory, which uses MATLAB's vpa to perform higher precision computations. Note that this is much slower than Advanpix. 
+
 
