@@ -1,6 +1,8 @@
 # tsir
 MATLAB codes for performing three-stage mixed precision iterative refinement
 
+This code can be used to reproduce the experiments in http://arxiv.org/abs/2107.06200.
+
 
 ## Included MATLAB files
 * **_chop.m, float_params.m, lutx_chop.m,  trisol.m, and roundit.m_** are functions in chop library that simulate half precision. The library and associated functions are available at https://github.com/higham/chop and https://github.com/SrikaraPranesh/LowPrecision\_Simulation.
