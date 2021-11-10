@@ -1,4 +1,4 @@
-function [x, error, its, flag] = gmres_dd( A, x, b, L, U, restrt, max_it, tol)
+function [x, error, its, flag] = gmres_dd( A, x, b, L, U, restrt, max_it, tol,gmresmid_maxiter)
 % GMRES_DD   Left-preconditioned GMRES in double precision without the extra
 % quadruple precision for factorization an preconditioner application
 %   Solves Ax=b by solving the preconditioned linear system (LU)^{-1}Ax=(LU)^{-1}b
@@ -26,7 +26,7 @@ function [x, error, its, flag] = gmres_dd( A, x, b, L, U, restrt, max_it, tol)
 
 flag = 0;
 its = 0;
-
+restrt = gmresmid_maxiter;                                                  % INSTEAD OF restrt = n, restrt = gmresmid_maxiter IS USED TO END THE LOOP AFTER gmresmid_maxiter ITERATIONS
 %Ensure double working precision
 A = double(A);
 b = double(b);
@@ -98,6 +98,9 @@ for iter = 1:max_it,                              % begin iteration
             x = x + addvec;
             break;
         end
+%         if (its >= gmresmid_maxiter-1)
+%             break
+%         end
     end
     
     if ( error(end) <= tol ), break, end

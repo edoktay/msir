@@ -1,4 +1,4 @@
-function [x, error, its, flag] = gmres_ss( A, x, b, L, U, restrt, max_it, tol)
+function [x, error, its, flag] = gmres_ss( A, x, b, L, U, restrt, max_it, tol,gmresmid_maxiter)
 %GMRES_SS   Left-preconditioned GMRES in single precision without the extra
 % double precision for factorization an preconditioner application
 %   Solves Ax=b by solving the preconditioned linear system (LU)^{-1}Ax=(LU)^{-1}b
@@ -24,7 +24,7 @@ function [x, error, its, flag] = gmres_ss( A, x, b, L, U, restrt, max_it, tol)
 
 flag = 0;
 its = 0;
-
+restrt = gmresmid_maxiter;                                                  % INSTEAD OF restrt = n, restrt = gmresmid_maxiter IS USED TO END THE LOOP AFTER gmresmid_maxiter ITERATIONS
 %Ensure single working precision
 A = single(A);
 b = single(b);

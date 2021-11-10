@@ -1,4 +1,4 @@
-function [x,cged,switchit,gmres_midits,gmres_miderr, ferr, nbe, cbe] = tsir_sgmresir(A,b,precf,precw,precr,iter_max,LL,U,x, xact, rho_thresh,gtol,u, gmresmid_maxiter)
+function [x,cged,switchit,gmres_midits,gmres_miderr, ferr, nbe, cbe] = tsir_sgmresir(A,b,precf,precw,precr,iter_max,LL,U,x, xact, rho_thresh,gtol,u_new, gmresmid_maxiter,u)
 %TSIR_SGMRESIR   SGMRESIR iterative refinement in three precisions used within the TSIR function.
 %     Solves Ax = b using GMRES-based iterative refinement, where the
 %     preconditioned matrix is applied in the working precision (with at most iter_max ref. steps), with
@@ -18,6 +18,9 @@ function [x,cged,switchit,gmres_midits,gmres_miderr, ferr, nbe, cbe] = tsir_sgmr
 % Note: requires Cleve Laboratory, Advanpix multiprecision toolbox, and
 % chop library (https://github.com/higham/chop)
 
+if (nargin==14)
+    u = u_new;
+end
 
 n = length(A);
 
@@ -34,7 +37,7 @@ cbe = [];
 phi = [];
 switchit = 0;
 
-dex = u^(-1);
+dex = u_new^(-1);
 rho_threshmax = 0;
 
 for i = 1:iter_max
@@ -58,9 +61,9 @@ for i = 1:iter_max
     if precw == 0
         [d, err, its, ~] = gmres_hh( A, chop(zeros(n,1)), chop(rd1), LL, U, n, 1, gtol);
     elseif precw == 2
-        [d, err, its, ~] = gmres_dd( A, zeros(n,1), double(rd1), LL, U, n, 1, gtol);
+        [d, err, its, ~] = gmres_dd( A, zeros(n,1), double(rd1), LL, U, n, 1, gtol,gmresmid_maxiter);
     else
-        [d, err, its, ~] = gmres_ss( A, single(zeros(n,1)), single(rd1), LL, U, n, 1, gtol);
+        [d, err, its, ~] = gmres_ss( A, single(zeros(n,1)), single(rd1), LL, U, n, 1, gtol,gmresmid_maxiter);
     end
     
     %Record number of iterations gmres took
@@ -122,7 +125,7 @@ for i = 1:iter_max
     dex = d;
     
     %Check whether we should switch to GMRESIR
-    if ( (norm_dx <= u) || (norm_ddex >= rho_thresh) ||  phi(i) < u || (gmresmid_lastiter>gmresmid_maxiter))
+    if ( (norm_dx <= u) || (norm_ddex >= rho_thresh) ||  phi(i) < u || (gmresmid_lastiter>=gmresmid_maxiter))     % CONDITION IS UPDATED
         
         %Convergence detected, but we will keep iterating for now
         if ( (phi(i) >= 0) && (phi(i) <= u) )
