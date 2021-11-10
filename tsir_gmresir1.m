@@ -1,5 +1,5 @@
 function [x,cged,switchit,gmresits,gmreserr,ferr,nbe,cbe] = tsir_gmresir1(A,b,precf,precw,precr,iter_max,LL,U,x, xact, rho_thresh,gtol,u_new,gmres_maxiter,u)
-%TSIR_GMRESIR   GMRES-based iterative refinement in three precisions used within the TSIR function.
+%TSIR_GMRESIR1   GMRES-based iterative refinement in three precisions used within the MSIR and TSIR1 functions.
 %     Solves Ax = b using GMRES-based
 %     iterative refinement where the preconditioner is applied in double the working precision
 %     (with at most iter_max ref. steps), with
@@ -24,6 +24,7 @@ if (nargin==14)
 end
 
 n = length(A);
+
 %Initialization
 x0 = x;
 cged = 0;
@@ -59,11 +60,11 @@ for i = 1:iter_max
     %Solve for correction term
     %Call GMRES to solve for correction term
     if precw == 0
-        [d, err, its, ~] = gmres_hs( A, chop(zeros(n,1)), chop(rd1), LL, U, n, 1, gtol);
+        [d, err, its, ~] = gmres_hs1( A, chop(zeros(n,1)), chop(rd1), LL, U, 1, gtol);
     elseif precw == 2
-        [d, err, its, ~] = gmres_dq1( A, zeros(n,1), double(rd1), LL, U, n, 1, gtol,gmres_maxiter);
+        [d, err, its, ~] = gmres_dq1( A, zeros(n,1), double(rd1), LL, U, 1, gtol,gmres_maxiter);
     else
-        [d, err, its, ~] = gmres_sd1( A, single(zeros(n,1)), single(rd1), LL, U, n, 1, gtol,gmres_maxiter);
+        [d, err, its, ~] = gmres_sd1( A, single(zeros(n,1)), single(rd1), LL, U, 1, gtol,gmres_maxiter);
     end
     
     %Record number of iterations gmres took
@@ -123,13 +124,11 @@ for i = 1:iter_max
     dex = d;
     
     %Check whether we should switch to uf = uf^2                            
-    if ( (norm_dx <= u) || (norm_ddex >= rho_thresh) ||  phi(i) < u || gmres_lastiter>=gmres_maxiter)                                % NEW CONDITION IS ADDED
+    if ( (norm_dx <= u) || (norm_ddex >= rho_thresh) ||  phi(i) < u || gmres_lastiter>=gmres_maxiter)                                
         
         %Convergence detected, but we will keep iterating for now
         if ( (phi(i) >= 0) && (phi(i) <= u) )
             fprintf('\n GMRESIR Convergence Detected\n');
-%             cged = 1;
-%             return;
         else
             %If the error is larger than the initial error we started
             %with, reset initial solution

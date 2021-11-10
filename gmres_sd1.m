@@ -1,5 +1,6 @@
-function [x, error, its, flag] = gmres_sd1( A, x, b, L, U, restrt, max_it, tol,gmres_maxiter)
-% GMRES_SD   Left-preconditioned GMRES in single/double precision
+function [x, error, its, flag] = gmres_sd1( A, x, b, L, U, max_it, tol, gmres_maxiter)
+% GMRES_SD1   Left-preconditioned GMRES in single/double precision used within
+%TSIR_GMRES1 function
 %   Solves Ax=b by solving the preconditioned linear system (LU)^{-1}Ax=(LU)^{-1}b
 %   using the Generalized Minimal residual ( GMRES ) method.
 %   Currently uses (preconditioned) relative residual norm to check for convergence 
@@ -7,24 +8,24 @@ function [x, error, its, flag] = gmres_sd1( A, x, b, L, U, restrt, max_it, tol,g
 %   Single precision used throughout, except in applying (U\L\A) to a vector 
 %   which is done in double precision
 %
-%   input   A        REAL nonsymmetric positive definite matrix
-%           x        REAL initial guess vector
-%           b        REAL right hand side vector
-%           L        REAL L factor of lu(A)
-%           U        REAL U factor of lu(A)
-%           restrt   INTEGER number of iterations between restarts
-%           max_it   INTEGER maximum number of iterations
-%           tol      REAL error tolerance
+%   input   A               REAL nonsymmetric positive definite matrix
+%           x               REAL initial guess vector
+%           b               REAL right hand side vector
+%           L               REAL L factor of lu(A)
+%           U               REAL U factor of lu(A)
+%           gmres_maxiter   INTEGER maximum number of iterations between restarts
+%           max_it          INTEGER maximum number of iterations
+%           tol             REAL error tolerance
 %
-%   output  x        REAL solution vector
-%           error    REAL error norm
-%           iter     INTEGER number of (inner) iterations performed
-%           flag     INTEGER: 0 = solution found to tolerance
-%                             1 = no convergence given max_it
+%   output  x               REAL solution vector
+%           error           REAL error norm
+%           iter            INTEGER number of (inner) iterations performed
+%           flag            INTEGER: 0 = solution found to tolerance
+%                               1 = no convergence given max_it
 
 flag = 0;
 its = 0;
-restrt = gmres_maxiter;                                                  % INSTEAD OF restrt = n, restrt = gmres_maxiter IS USED TO END THE LOOP AFTER gmresmid_maxiter ITERATIONS
+restrt = gmres_maxiter;      
 
 %Ensure single working precision
 A = single(A);
@@ -44,7 +45,6 @@ r = single(r);
 
 bnrm2 = norm(r );
 if  ( bnrm2 == 0.0 ), bnrm2 = 1.0; end
-
 
 error(1) = norm( r ) / bnrm2;
 if ( error(1) < tol ) return, end

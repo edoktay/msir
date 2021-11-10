@@ -1,5 +1,5 @@
 function [x,cged,i,gmresits,gmreserr,ferr,nbe,cbe] = tsir_gmresir(A,b,precf,precw,precr,iter_max,LL,U,x, xact, rho_thresh,gtol,u)
-%TSIR_GMRESIR   GMRES-based iterative refinement in three precisions used within the TSIR function.
+%TSIR_GMRESIR   GMRES-based iterative refinement in three precisions used within the TSIR1 function.
 %     Solves Ax = b using GMRES-based
 %     iterative refinement where the preconditioner is applied in double the working precision
 %     (with at most iter_max ref. steps), with

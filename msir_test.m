@@ -38,7 +38,7 @@ for i = 1:numel(condnums)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
        
 end
@@ -71,7 +71,7 @@ for i = 1:numel(condnums)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
        
 end
@@ -100,7 +100,7 @@ for i = 1:numel(condnums)
     gmresir(A,b,uf,u,ur,maxit,strcat(snbase,'GMRESIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
        
 end
@@ -135,7 +135,7 @@ for i = 1:numel(condnums)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
        
 end
@@ -168,7 +168,7 @@ for i = 1:numel(condnums)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
        
 end
@@ -200,7 +200,7 @@ for i = 1:numel(condnums)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
        
 end

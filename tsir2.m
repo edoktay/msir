@@ -1,36 +1,50 @@
 function [x,cged,ferr,nbe,cbe,sirit,gmres_midits,gmresits,switch_iter_mid,switch_iter] = tsir2(A,b,precf,precw,precr,iter_max,rho_thresh,x,xact,u_old)
+%TSIR2   Three-stage iterative refinement in three precisions used within the MSIR function.
+%     [x,cged,ferr,nbe,cbe,sirit,gmres_midits,gmresits,switch_iter_mid,switch_iter] = tsir2(A,b,precf,precw,precr,iter_max,rho_thresh,x,xact,u_old) 
+%     solves Ax = b using iterative refinement (with at most 3*iter_max ref. steps), with
+%     LU factors computed in precision precf:
+%       * half if precf = 0,
+%       * single if precf = 1,
+%       * double if precf = 2,
+%     working precision precw:
+%       * half if precw = 0,
+%       * single if precw = 1,
+%       * double if precw = 2,
+%     and residuals computed at precision precr:
+%       * single if precr = 1,
+%       * double if precr = 2,
+%       * quad if precr = 4
+%
+% Note: requires Cleve Laboratory, Advanpix multiprecision toolbox, and
+% chop library (https://github.com/higham/chop)
 
 n = length(A);
 
 if precf == 1
-  %  fprintf('**** Factorization precision is single.\n')
-    ufs = 'single';
+   fprintf('**** Factorization precision is single.\n')
+   ufs = 'single';
 elseif precf == 2
-  %  fprintf('**** Factorization precision is double.\n')
-    ufs = 'double';
+   fprintf('**** Factorization precision is double.\n')
+   ufs = 'double';
 else
-  %  fprintf('**** Factorization precision is half.\n')
-    ufs = 'half';
+   fprintf('**** Factorization precision is half.\n')
+   ufs = 'half';
 end
 
 if precw == 0
-  %  fprintf('**** Working precision is half.\n')
-    uws = 'half';
-    uws1 = 'h';
-    fp.format = 'h';
-    chop([],fp);
-    gtol=1e-2;
-    u = float_params('h');
+   fprintf('**** Working precision is half.\n')
+   fp.format = 'h';
+   chop([],fp);
+   gtol=1e-2;
+   u = float_params('h');
 elseif precw == 2
-  %  fprintf('**** Working precision is double.\n')
-    uws = 'double';
-    A = double(A);
-    b = double(b);
-    gtol = 1e-10;
-    u = eps('double');
+   fprintf('**** Working precision is double.\n')
+   A = double(A);
+   b = double(b);
+   gtol = 1e-10;
+   u = eps('double');
 else
-  %  fprintf('**** Working precision is single.\n')
-    uws = 'single';
+    fprintf('**** Working precision is single.\n')
     A = single(A);
     b = single(b);
     gtol=1e-6;
@@ -38,20 +52,15 @@ else
 end
 
 if precr == 1
-  %  fprintf('**** Residual precision is single.\n')
-    urs = 'single';
+   fprintf('**** Residual precision is single.\n')
 elseif precr == 2
-  %  fprintf('**** Residual precision is double.\n')
-    urs = 'double';
+   fprintf('**** Residual precision is double.\n')
 else
-  %  fprintf('**** Residual precision is quad.\n')
-    urs = 'quad';
-    mp.Digits(34);
+   fprintf('**** Residual precision is quad.\n')
+   mp.Digits(34);
 end
 
-[uh,xmins,xmin,xmax] = float_params(ufs);
-
-
+[~,~,~,xmax] = float_params(ufs);
 
 %Compute LU factorization
 if precf == 1
@@ -77,7 +86,7 @@ else
         Ah = chop(Ah);
         [L,U,p] = lutx_chop(Ah);
         I = chop(eye(n)); P = I(p,:);
-        LL = P'*L; %(double(P')*double(L));
+        LL = P'*L; 
         LL = (1/mu)*diag(1./diag(R))*(LL);
         U = (U)*diag(1./diag(C));
     else
@@ -87,7 +96,6 @@ else
     
 end
 
-
 %Store initial solution in working precision
 if precw == 0
     x = chop(x);
@@ -96,15 +104,6 @@ elseif precw == 2
 else
     x = single(x);
 end
-
-%Compute size of initial errors
-% ferri = double(norm(mp(double(x),34)-mp(xact,34),'inf')/norm(mp(xact,34),'inf'));
-% res = double(b) - double(A)*double(x);
-% nbei = double(norm(mp(res,34),'inf')/(norm(mp(double(A),34),'inf')*norm(mp(double(x),34),'inf')+ norm(mp(double(b),34),'inf')));
-% temp = double( abs(mp(res,34)) ./ (abs(mp(double(A),34))*abs(mp(double(x),34)) + abs(mp(double(b),34))) );
-% temp(isnan(temp)) = 0; % Set 0/0 to 0.
-% cbei = max(temp);
-
 
 % Initialization
 cged = 0;
@@ -120,18 +119,13 @@ dex = u^(-1);
 
 switch_iter_mid = 0; switch_iter = 0;
 
-rho_threshmax = 0;
 ferrs = []; nbes = []; cbes = [];
 ferrsg = []; nbesg = []; cbesg = [];
 ferrg = []; nbeg = []; cbeg = [];
 
 %Run SIR
 [x,cged,switch_iter_mid, ferrs, nbes, cbes] = tsir_sir(A,b,precf,precw,precr,iter_max, L,U,P,x, xact, rho_thresh,u,u_old);
-%double(u)
-% ferrs(end)
-% if ferrs(end)<double(u)
-%     fprintf('STOP\n');
-% end
+
 %If SIR didn't converge, run SGMRESIR
 if ~cged
     gmresir_mid_dummy_tsir = 1;
@@ -146,9 +140,6 @@ if ~cged
 end
 
 %Concatenate error vectors for plotting
-% ferr = [ferri, ferrs, ferrsg, ferrg];
-% nbe = [nbei, nbes, nbesg, nbeg];
-% cbe = [cbei, cbes, cbesg, cbeg];
 ferr = [ferrs, ferrsg, ferrg];
 nbe = [nbes, nbesg, nbeg];
 cbe = [cbes, cbesg, cbeg];

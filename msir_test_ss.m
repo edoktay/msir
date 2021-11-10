@@ -4,7 +4,7 @@
 %Note: requires ssget MATLAB interface
 
 matids = [907, 1641, 293, 906, 462, 464, 1199, 2338, 253];
-maxit = 10;
+maxit = 2000;
 
 fprintf('Running SDQ tests for SuiteSparse matrices\n');
 for i = 1:numel(matids)
@@ -33,7 +33,7 @@ for i = 1:numel(matids)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
     
 end
@@ -65,7 +65,7 @@ for i = 1:numel(matids)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
     
 end
@@ -97,7 +97,7 @@ for i = 1:numel(matids)
     drawnow
 
     
-    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'TSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
+    msir(A,b,uf,u,ur,maxit, .5,strcat(snbase,'MSIR_',num2str(uf),num2str(u),num2str(ur),'_1'));
     drawnow
     
 end
